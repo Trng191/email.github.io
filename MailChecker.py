@@ -2,8 +2,8 @@ import imaplib
 import email
 
 server = 'imap.gmail.com'
-account = 'test.sender.pp@gmail.com'
-password = 'mqre gihn qzct yulz'
+account = 'mangmaytinhremotecontrol@gmail.com'
+password = 'lmlx vrwx cwym hvqz'
 
 imap = imaplib.IMAP4_SSL(host = server, port = 993)
     
