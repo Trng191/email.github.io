@@ -8,24 +8,16 @@ from email.header import decode_header
 import screenshot
 import shutdown
 
-username = "mangmaytinhremotecontrol@gmail.com"
-password = "lmlx vrwx cwym hvqz"
-
-imap_server = imaplib.IMAP4_SSL("imap.gmail.com")
-imap_server.login(username, password)
-imap_server.select("inbox")
-
-function_map = {
-    "screenshot": screenshot.screen_shot,
-    "shutdown": shutdown.shutdown,
-    # Add more commands and corresponding functions as needed
-}
+username_sender = "test.sender.pp@gmail.com"
+password_sender = "mqre gihn qzct yulz"
+username_receiver = "mangmaytinhremotecontrol@gmail.com"
+password_receiver = "lmlx vrwx cwym hvqz"
 
 smtp_server = 'smtp.gmail.com'  # SMTP server for Gmail
 smtp_port = 587  # Port for TLS
 
 
-def send_email(sender, receiver, subject, body, image_data=None):
+def send_email(sender, receiver, subject, body, isSender, image_data=None):
     msg = MIMEMultipart()
     msg["From"] = sender
     msg["To"] = receiver
@@ -37,14 +29,17 @@ def send_email(sender, receiver, subject, body, image_data=None):
     text = msg.as_string()
     server = smtplib.SMTP(smtp_server, smtp_port)
     server.starttls()
-    server.login(username, password)
+    if (isSender == True):
+        server.login(username_sender, password_sender)
+    else:
+        server.login(username_receiver, password_receiver)
     server.sendmail(sender, receiver, text)
     server.quit()
 
 
 def fetch_and_process_emails():
     imap = imaplib.IMAP4_SSL("imap.gmail.com")
-    imap.login(username, password)
+    imap.login(username_receiver, password_receiver)
     status, messages = imap.select("INBOX")
     N = 1
     messages = int(messages[0])
@@ -58,13 +53,13 @@ def fetch_and_process_emails():
                 subject = subject.lower()
                 if subject == "screenshot":
                     image_data = screenshot.screen_shot()
-                    send_email(username, username, "Screenshot taken",
-                               "See attachment: ", image_data)
+                    send_email(username_receiver, username_sender, "Screenshot taken",
+                               "See attachment: ", False, image_data)
                 elif subject == "shutdown":
                     shutdown.shutdown()
                 else:
-                    send_email(username, username,
-                               "Invalid command", "Command not found")
+                    send_email(username_receiver, username_sender,
+                               "Invalid command", "Command not found", False)
     imap.close()
     imap.logout()
 
@@ -72,11 +67,8 @@ def fetch_and_process_emails():
 while True:
     subject = input("Enter subject: ")
     body = input("Enter body: ")
-    send_email(username, username, subject, body)
+    send_email(username_sender, username_receiver, subject, body, True)
     fetch_and_process_emails()
     command = input("Enter E to exit, enter any other key to continue: ")
     if (command == "E" or command == "e"):
         break
-
-
-imap_server.logout()
