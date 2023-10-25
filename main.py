@@ -53,9 +53,11 @@ def fetch_and_process_emails():
                 subject = subject.lower()
                 if subject == "screenshot":
                     image_data = screenshot.screen_shot()
-                    send_email(username_receiver, username_sender, "Screenshot taken",
+                    send_email(username_receiver, username_sender, "Screenshot Talen!",
                                "See attachment: ", False, image_data)
                 elif subject == "shutdown":
+                    send_email(username_receiver, username_sender,
+                               "Shutting Down PC!", "PC is shutting down...", False)
                     shutdown.shutdown()
                 else:
                     send_email(username_receiver, username_sender,

@@ -3,6 +3,7 @@ from platform import system
 
 
 def shutdown():
+    print("Command received, shutting down PC...")
     os.system("shutdown -s -t 0")
 
 
