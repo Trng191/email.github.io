@@ -1,0 +1,30 @@
+read mail: imap
+- host: imap.gmail.com
+- port: 993 (SSL), 143 (TLS)
+- SSL : Secure Socket Layer
+- TLS : Transport Layer Security
+
+return: [mail object]
+
+decode/process/extract mail content
+import email
+
+send mail: smtplib
+
+function handling:
+self define(shutdown: os.system())
+screenshot, keylog...
+
+
+how it works:
+1. create an account for receiving/sending emails
+2. link python script to mail account (user_name: exampl@gmail.com, app password)
+3. python script uses imap to read mail
+4. use email module to decode/process/extract mail content, recommended return a string, whose content is the command itself
+5. create a function_map (dictionary):
+    {'command': function,
+    'command': function2,...}
+6. call function as such:
+    cmd = 'screenshot'
+    function_map[cmd]()
+7. send mail back to sender (execution result, attachements, etc.)
