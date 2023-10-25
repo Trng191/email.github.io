@@ -8,8 +8,8 @@ from email.header import decode_header
 import screenshot
 import shutdown
 
-username = "test.sender.pp@gmail.com"
-password = "mqre gihn qzct yulz"
+username = "mangmaytinhremotecontrol@gmail.com"
+password = "lmlx vrwx cwym hvqz"
 
 imap_server = imaplib.IMAP4_SSL("imap.gmail.com")
 imap_server.login(username, password)
@@ -79,3 +79,4 @@ while True:
 
 
 imap_server.logout()
+smtp_server.logout()
