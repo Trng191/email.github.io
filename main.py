@@ -55,6 +55,7 @@ def fetch_and_process_emails():
             if isinstance(response, tuple):
                 msg = email.message_from_bytes(response[1])
                 subject, encoding = decode_header(msg["Subject"])[0]
+                subject = subject.lower()
                 if subject == "screenshot":
                     image_data = screenshot.screen_shot()
                     send_email(username, username, "Screenshot taken",
