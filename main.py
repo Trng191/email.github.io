@@ -79,4 +79,3 @@ while True:
 
 
 imap_server.logout()
-smtp_server.logout()
