@@ -8,6 +8,7 @@ from email.mime.image import MIMEImage
 from email.header import decode_header
 import screenshot
 import shutdown
+from process_app import *
 
 server = 'imap.gmail.com'
 username_receiver = 'mangmaytinhremotecontrol@gmail.com'
@@ -42,8 +43,8 @@ def send_email(sender, receiver, subject, body, image_data=None):
 
 
 def CheckAndDo(cmd):
-    if (cmd == 'list processes'):
-        print('processes: pA, pB, pC')
+    if (cmd == 'applications'):
+        print(execute_msg(cmd))
     elif (cmd == 'keylogger'):
         print('keylogger: A, B, C, D')
     elif (cmd == 'screenshot'):
@@ -59,6 +60,7 @@ def CheckAndDo(cmd):
 
 
 # Select unseen message in Inbox to read
+cnt = 0
 cmd = 'start'
 while cmd != 'quit':
     imap.select("Inbox")
@@ -79,6 +81,9 @@ while cmd != 'quit':
     imap.close()
 
     time.sleep(0.4)
+    cnt += 1
+    if cnt > 40:
+        cmd = 'quit'
 
 print("Byee")
 
