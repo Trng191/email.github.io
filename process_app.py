@@ -116,13 +116,13 @@ def execute_msg(msg):
         result = "List of process\n" + "Id - Name\n" + processes()
     elif "Start" in msg:
         try:
-            name = re.search(r'Start\[name:(.*)\]', msg).group(1)
+            name = re.search(r'Start \[name:(.*)\]', msg).group(1)
         except:
             print("Wrong format.")
         result = turn_on(name)
-    elif "shut down" in msg:
+    elif "Kill" in msg:
         try:
-            id = re.search(r'id:(\d+)', msg).group(1)
+            id = re.search(r'id: (\d+)', msg).group(1)
         except:
             print("Wrong format.")
         result = turn_off(id)

