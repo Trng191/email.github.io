@@ -1,7 +1,7 @@
 import PySimpleGUI as sg
 import email_interface
 
-sg.theme('SystemDefault')
+sg.theme('LightPurple')
 
 layout = [
     [sg.Column([[sg.Text("Enter full name:"), sg.Input(key='-NAME-', do_not_clear=True, size=(40, 1))],
