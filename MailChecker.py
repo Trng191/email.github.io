@@ -82,10 +82,8 @@ while cmd != 'quit':
         message = email.message_from_string(mailData[0][1].decode())
 
         # Get message
-        for part in message.walk():
-            if (part.get_content_type() == 'text/plain'):
-                cmd = part.as_string().splitlines()[-1]
-                CheckAndDo(cmd)
+        cmd = message.get("Subject")
+        CheckAndDo(cmd)
 
     imap.close()
 
