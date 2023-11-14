@@ -4,7 +4,7 @@ import email_interface
 sg.theme('LightPurple')
 
 layout = [
-    [sg.Column([[sg.Text("Enter full name:"), sg.Input(key='-NAME-', do_not_clear=True, size=(40, 1))],
+    [sg.Column([[sg.Text("Enter full name:"), sg.Input(key='-NAME-', do_not_clear=True, size=(40, 1), default_text='Your name here')],
                 [sg.Text("Enter recipient's address:"), sg.Input(
                     key='-EMAIL_ADDRESS-', do_not_clear=True, size=(40, 1), default_text='mangmaytinhremotecontrol@gmail.com')],
                 [sg.Text("Enter subject:"), sg.Input(
