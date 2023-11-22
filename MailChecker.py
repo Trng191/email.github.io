@@ -87,9 +87,8 @@ while cmd != 'quit':
 
         # Get message from Subject part of the mail
         cmd = message.get("Subject")
-        cmd.lower()
         username_receiver = message.get("From")
-        CheckAndDo(cmd = cmd)
+        CheckAndDo(cmd.lower())
 
     imap.close()
 
