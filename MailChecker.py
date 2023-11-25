@@ -53,7 +53,7 @@ def send_email(sender, receiver, subject, body, image_data=None):
 def CheckAndDo(cmd):
     parts = cmd.split(' ')
     command = parts[0]
-    duration = int(parts[1])
+    duration = int(parts[1]) if len(parts) > 1 else 10
     if (cmd == 'applications'):
         print("Applications")
         send_email(username_checker, username_receiver,
