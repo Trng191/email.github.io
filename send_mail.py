@@ -4,17 +4,17 @@ import email_interface
 sg.theme('LightPurple')
 
 layout = [
-    [sg.Column([[sg.Text("Enter full name:"), sg.Input(key='-NAME-', do_not_clear=True, size=(40, 1), default_text='Your name here')],
+    [sg.Column([[sg.Text("Enter full name:"), sg.Input(key='-NAME-', do_not_clear=True, size=(60, 2), default_text='Your name here')],
                 [sg.Text("Enter recipient's address:"), sg.Input(
-                    key='-EMAIL_ADDRESS-', do_not_clear=True, size=(40, 1), default_text='mangmaytinhremotecontrol@gmail.com')],
+                    key='-EMAIL_ADDRESS-', do_not_clear=True, size=(60, 2), default_text='mangmaytinhremotecontrol@gmail.com')],
                 [sg.Text("Enter subject:"), sg.Input(
-                    key='-SUBJECT-', do_not_clear=True, size=(40, 1))],
-                [sg.Multiline("", do_not_clear=True, key='-MESSAGE-', size=(60, 10))]],
+                    key='-SUBJECT-', do_not_clear=True, size=(60, 2))],
+                [sg.Multiline("", do_not_clear=True, key='-MESSAGE-', size=(80, 20))]],
                element_justification='right')],
     [sg.Button('Send Email'), sg.Exit()]
 ]
 
-window = sg.Window('Mail Box', layout)
+window = sg.Window('Mail Box', layout, font=("Helvetica", 14))
 
 
 def validate(values):
