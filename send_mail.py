@@ -37,10 +37,6 @@ def validate(values):
         values_invalid.append('SUBJECT')
         is_valid = False
 
-    if len(values['-MESSAGE-']) == 0:
-        values_invalid.append('MESSAGE')
-        is_valid = False
-
     result = [is_valid, values_invalid]
     return result
 
