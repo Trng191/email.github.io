@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+import json
 
 class Email:
     def __init__(self, sender, subject, snippet, read):
@@ -21,13 +22,22 @@ def create_email_frame(email, frame, row):
     line = ttk.Separator(frame, orient="horizontal")
     line.grid(row=row + 3, column=0, sticky="ew", pady=(5, 0))
 
+
+def load_emails_from_file(file_path):
+    with open(file_path, 'r') as file:
+        data = json.load(file)
+        emails = [Email(email["sender"], email["subject"], email["snippet"], email["read"]) for email in data]
+    return emails
+
+def search_emails(keyword, emails, inner_frame):
+    for widget in inner_frame.winfo_children():
+        widget.destroy()
+    filtered_emails = [email for email in emails if keyword.lower() in email.sender.lower() or keyword.lower() in email.subject.lower() or keyword.lower() in email.snippet.lower()]
+    for i, email in enumerate(filtered_emails):
+        create_email_frame(email, inner_frame, row=i * 4)
+
 def main():
-    emails_data = [
-        {"sender": "Nguyễn Trúc Nguyên", "subject": "Project1", "snippet": "", "read": False},
-        {"sender": "Nguyên Nguyên", "subject": "Project2", "snippet": "", "read": True},
-        {"sender": "Preeda", "subject": "Project Update", "snippet": "", "read": False},
-    ]
-    emails = [Email(email["sender"], email["subject"], email["snippet"], email["read"]) for email in emails_data]
+    emails = load_emails_from_file('D:\MMT\Project\Email\Remote-Control-Another-Computer-Using-Email-\email.json')
 
     root = tk.Tk()
     root.title("Inbox - Google Email")
@@ -36,7 +46,7 @@ def main():
     search_frame.grid(row=0, column=0, pady=10, padx=10, sticky="w")
     search_entry = ttk.Entry(search_frame, width=30)
     search_entry.grid(row=0, column=0, padx=5)
-    search_button = ttk.Button(search_frame, text="Search", command=lambda: search_emails(search_entry.get(), emails, inner_frame))
+    search_button = ttk.Button(search_frame, text="Search", command=lambda: search_emails(search_entry.get(), inner_frame))
     search_button.grid(row=0, column=1, padx=5)
 
     email_frame = ttk.Frame(root, borderwidth=2, relief="groove")
@@ -60,13 +70,6 @@ def main():
     ttk.Label(root).grid(row=3, column=0, pady=(10, 0))
 
     root.mainloop()
-
-def search_emails(keyword, emails, inner_frame):
-    for widget in inner_frame.winfo_children():
-        widget.destroy()
-    filtered_emails = [email for email in emails if keyword.lower() in email.sender.lower() or keyword.lower() in email.subject.lower() or keyword.lower() in email.snippet.lower()]
-    for i, email in enumerate(filtered_emails):
-        create_email_frame(email, inner_frame, row=i * 4)
 
 if __name__ == '__main__':
     main()
